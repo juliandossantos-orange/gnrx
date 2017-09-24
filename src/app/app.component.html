@@ -1,0 +1,39 @@
+<table>
+  <thead>
+  <tr>
+    <th>Id</th>
+    <th>Nom</th>
+    <th>
+      <button (click)="create()" [disabled]="newDevice | async">Ajouter</button>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngIf="newDevice | async as device">
+    <td colspan="2">
+      <input [(ngModel)]="device.name" placeholder="Nom">
+    </td>
+    <td>
+      <button (click)="add()">Ok</button>
+      <button (click)="cancelAdd()">Cancel</button>
+    </td>
+  </tr>
+  <tr *ngFor="let device of devices | async">
+    <ng-container *ngIf="!device.editing; else editTemplate">
+      <td>{{device.id}}</td>
+      <td>{{device.name}}</td>
+      <td>
+        <button (click)="edit(device)" *ngIf="!device.editing">Edit</button>
+      </td>
+    </ng-container>
+    <ng-template #editTemplate>
+      <td>{{device.id}}</td>
+      <td><input [(ngModel)]="device.editing.name"></td>
+      <td>
+        <button (click)="update(device.id, device.editing)">Ok</button>
+        <button (click)="cancelEdit(device.id)">Cancel</button>
+      </td>
+    </ng-template>
+  </tr>
+  </tbody>
+</table>
